@@ -8,18 +8,26 @@ interface Item {
 interface ListItemProps {
   name: string;
   completed: boolean;
+  onCompleted: any;
+  index: number;
 }
 
-const ListItem = ({ name, completed }: ListItemProps) => {
-  const [done, setDone] = useState(completed);
+const ListItem = ({ name, completed, onCompleted, index }: ListItemProps) => {
   return (
-    <div className="item">
+    <div className="item py-2">
       <input
         type={"checkbox"}
-        checked={done}
-        onChange={() => setDone(!completed)}
+        onChange={() => {
+          onCompleted({ name: name, completed: !completed }, index);
+        }}
+        checked={completed}
+        className={"mr-2 text-xl"}
       />
-      <span>{name}</span>
+      <span
+        className={`text-lg ${completed ? "line-through text-gray-500" : ""}`}
+      >
+        {name}
+      </span>
     </div>
   );
 };
@@ -32,9 +40,22 @@ const App = () => {
     { name: "Fix the tv", completed: false },
   ] as Item[]);
 
+  const handleCompleted = (newItem: Item, index: number) => {
+    const update = things.map((previous, i) =>
+      i === index ? newItem : previous
+    );
+    setThings(update);
+  };
+
   const renderList = () => {
     return things.map((item, index) => (
-      <ListItem name={item.name} completed={item.completed} key={index} />
+      <ListItem
+        name={item.name}
+        completed={item.completed}
+        key={index}
+        onCompleted={handleCompleted}
+        index={index}
+      />
     ));
   };
 
@@ -45,8 +66,8 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Todo</h1>
+    <div className={"container mx-auto max-w-xs mt-20"}>
+      <h1 className={"text-center mb-6 font-bold text-xl"}>Todo List</h1>
       <div className="field">
         <form onSubmit={addTask}>
           <input
@@ -54,10 +75,13 @@ const App = () => {
             placeholder={"Add your todo"}
             value={task}
             onChange={(e) => setTask(e.target.value)}
+            className={
+              "px-4 py-3 focus:shadow-outline w-full bg-gray-200 border-2"
+            }
           />
         </form>
       </div>
-      <div className={"list"}>{renderList()}</div>
+      <div className={"list mt-5 px-4"}>{renderList()}</div>
     </div>
   );
 };

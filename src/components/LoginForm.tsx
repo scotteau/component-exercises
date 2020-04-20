@@ -22,6 +22,9 @@ const LoginForm = (props: myProps) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(_state);
+    setUsername("");
+    setPassword("");
+    setRemembered("");
   };
 
   return (
