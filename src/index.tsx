@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import LoginForm from "./components/LoginForm";
+import "./index.css";
 
-
-ReactDOM.render(
-    <h1>Hello world!</h1>,
-    document.querySelector("#root")
-);
+ReactDOM.render(<LoginForm />, document.querySelector("#root"));
